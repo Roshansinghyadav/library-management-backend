@@ -27,7 +27,11 @@ router.post('/register', registerRules, validate, register);
 router.post('/login', loginRules, validate, login);
 router.get('/me', protect, getMe);
 router.put('/me', protect, updateProfile);
-router.put('/change-password', protect, changePasswordRules, validate, changePassword);
+router.post('/login-test', (req, res) => {
+  // Simple dev stub – returns success without DB checks
+  res.json({ message: 'Login success (dev stub)' });
+});
+
 
 // ── Forgot Password OTP Flow (Public) ──────────────────────────────────────
 router.post('/forgot-password', body('email').isEmail().withMessage('Valid email is required'), validate, forgotPassword);

@@ -44,14 +44,15 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // ── Health Check ─────────────────────────────────────────────────────────────
-app.get('/api/health', (req, res) => {
+app.get('/api', (req, res) => {
   res.json({
     status: 'ok',
-    message: 'LMS API is running',
+    message: 'LMS API Root',
     timestamp: new Date().toISOString(),
-    version: '1.0.0',
   });
 });
+
+
 
 // ── API Routes ────────────────────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);
