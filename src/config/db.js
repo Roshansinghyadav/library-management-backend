@@ -30,9 +30,20 @@ const connectDB = async () => {
       attachListeners();
       return conn;
     } catch (localErr) {
-      console.error('❌ Both Atlas and local MongoDB connections failed:');
-      console.error(localErr.message);
-      throw localErr;
+      console.warn('⚠️ Both Atlas and local MongoDB connections failed. Trying in-memory MongoDB...');
+      try {
+        const { MongoMemoryServer } = require('mongodb-memory-server');
+        const mongoServer = await MongoMemoryServer.create();
+        const memoryURI = mongoServer.getUri();
+        const conn = await mongoose.connect(memoryURI, { serverSelectionTimeoutMS: 5000 });
+        console.log(`✅ MongoDB Connected (In-Memory): ${conn.connection.host}`);
+        attachListeners();
+        return conn;
+      } catch (memoryErr) {
+        console.error('❌ All MongoDB connections failed:');
+        console.error(memoryErr.message);
+        throw memoryErr;
+      }
     }
   }
 };
